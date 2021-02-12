@@ -20,8 +20,7 @@ setup(name='fast_wrap',
       package_dir={'fast_wrap': 'fast_wrap'},
       include_package_data=False,
       install_requires=["mdtraj", "numpy"],
-      #entry_points={
-      #    "console_scripts" : ["analyze=bin.analyze:main"],
-      #    },
-      #scripts=['bin/progress.sh'],
+      entry_points={
+          "console_scripts" : ["wrap_traj=bin.wrap_traj:wrap_func"],
+          },
 )
