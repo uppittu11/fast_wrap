@@ -11,13 +11,13 @@ def wrap(t, whole_molecules=True, center=None, inplace=False):
     res_atoms = [[a.index for a in residue.atoms]
                  for residue in t.top.residues]
 
-    if center:
+    if center is not None:
         assert (len(center) == 3), "Center must be a list of length 3"
         try:
             center = np.array(center, dtype=float)
         except ValueError:
             raise ValueError("Center must be a list of floats")
-        xyz = xyz + unitcell_lengths[:,None,:] * 0.5 - center[None,None,:]
+        xyz = xyz + box[:,None,:] * 0.5 - center[None,None,:]
 
     res_atoms = np.array(res_atoms, dtype=object)
     if whole_molecules:
@@ -32,8 +32,8 @@ def wrap(t, whole_molecules=True, center=None, inplace=False):
         images = _get_image(xyz, box)
         wrapped_xyz = xyz - box[:,None,:] * images
 
-    if center:
-        wrapped_xyz = wrapped_xyz - unitcell_lengths[:,None,:] * 0.5 + center[None,None,:]
+    if center is not None:
+        wrapped_xyz = wrapped_xyz - box[:,None,:] * 0.5 + center[None,None,:]
 
     if inplace:
         t.xyz = wrapped_xyz

@@ -14,11 +14,17 @@ def wrap_func():
             help="output file; must be a MDTraj supported file format.")
     parser.add_argument("--nowhole", dest="whole", action="store_false", default=True,
             help="[Don't] keep molecules whole.")
+    parser.add_argument("--center", dest="center", action="store_true", default=False,
+            help="Center the box at the origin.")
 
     args = parser.parse_args()
     if args.top:
         traj = md.load(args.traj, top=args.top)
     else:
         traj = md.load(args.traj)
-    wrapped = fast_wrap.wrap(traj, whole_molecules=args.whole)
+    if args.center:
+        center = [0, 0, 0]
+    else:
+        center = None
+    wrapped = fast_wrap.wrap(traj, whole_molecules=args.whole, center=center)
     wrapped.save(args.output)
