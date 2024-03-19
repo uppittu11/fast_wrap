@@ -25,7 +25,8 @@ def wrap(t, whole_molecules=True, center=None, inplace=False):
         res_images = _get_image(res_cogs, box)
         images = np.zeros_like(xyz)
         for res_idx, res in enumerate(res_atoms):
-                images[:,res,:] = res_images[:,res_idx,:][:,None,:]
+            res = np.array(res, dtype=int)
+            images[:,res,:] = res_images[:,res_idx,:][:,None,:]
         wrapped_xyz = xyz - box[:,None,:] * images
 
     else:
@@ -47,6 +48,7 @@ def wrap(t, whole_molecules=True, center=None, inplace=False):
 def _get_cogs(xyz, res_atoms):
     res_cogs = np.zeros((xyz.shape[0], len(res_atoms), 3), dtype=float)
     for i, res in enumerate(res_atoms):
+        res = np.array(res, dtype=int)
         res_cog = np.mean(xyz[:,res,:], axis=1)
         res_cogs[:,i,:] = res_cog
     return res_cogs
